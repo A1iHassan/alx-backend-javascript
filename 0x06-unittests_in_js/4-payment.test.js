@@ -1,35 +1,16 @@
-/* eslint-disable jest/expect-expect */
-/* eslint-disable jest/no-hooks */
-/* eslint-disable jest/valid-expect */
-/* eslint-disable no-unused-expressions */
-/* eslint-disable jest/prefer-expect-assertions */
-/* eslint-disable prefer-destructuring */
-const sinon = require('sinon');
-const Utils = require('./utils');
-const sendPaymentRequestToApi = require('./4-payment');
+const {describe, it} = require("mocha");
+const sinon = require("sinon");
+const sendPaymentRequestToApi = require("./4-payment");
+const Utils = require("./utils");
+const assert = require("assert");
 
-describe('sendPaymentRequestToApi', () => {
-  let stub;
+describe("sendPaymentRequestToApi", function() {
+    it("check that Utils.calculateNumber is stubbed", function() {
+	const spy = sinon.spy(console, "log");
+	const stub = sinon.stub(Utils, "calculateNumber").returns(10);
+	sendPaymentRequestToApi(100, 20);
 
-  beforeEach(() => {
-    stub = sinon.stub(Utils, 'calculateNumber').returns(10);
-  });
-
-  afterEach(() => {
-    stub.restore();
-  });
-
-  it('sendPaymentRequestToApi uses the calculateNumber method of Utils', () => {
-    const spy = sinon.spy(console, 'log');
-
-    sendPaymentRequestToApi(100, 20);
-
-    sinon.assert.calledOnce(stub);
-    sinon.assert.calledWith(stub, 'SUM', 100, 20);
-
-    sinon.assert.calledOnce(spy);
-    sinon.assert.calledWith(spy, 'The total is: 10');
-
-    spy.restore();
-  });
+	assert(spy.withArgs("The total is: 10").calledOnce);
+	assert(stub.withArgs("SUM", 100, 20).calledOnce);
+    });
 });

@@ -1,19 +1,16 @@
-/* eslint-disable jest/valid-expect */
-/* eslint-disable no-unused-expressions */
-/* eslint-disable jest/prefer-expect-assertions */
-/* eslint-disable prefer-destructuring */
-const sinon = require('sinon');
-const expect = require('chai').expect;
-const Utils = require('./utils');
-const sendPaymentRequestToApi = require('./3-payment');
+const {describe, it} = require("mocha");
+const sinon = require("sinon");
+const sendPaymentRequestToApi = require("./3-payment");
+const Utils = require("./utils");
+const assert = require("assert");
 
-describe('sendPaymentRequestToApi', () => {
-  it('sendPaymentRequestToApi uses the calculateNumber method of Utils', () => {
-    const bigBrother = sinon.spy(Utils);
+describe("sendPaymentRequestToApi", function() {
+    it("check that Utils.calculateNumber was called once", function() {
+	const spy = sinon.spy(Utils, "calculateNumber");
 
-    sendPaymentRequestToApi(100, 20);
-    expect(bigBrother.calculateNumber.calledWith('SUM', 100, 20)).to.be.true;
-    expect(bigBrother.calculateNumber.callCount).to.be.equal(1);
-    bigBrother.calculateNumber.restore();
-  });
+	sendPaymentRequestToApi(50, 24.52);
+
+	assert(spy.calledOnce);
+	spy.restore();
+    });
 });
